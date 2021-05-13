@@ -39,7 +39,7 @@ namespace IterationEngine.MonoProject
         private TileSheetBrowser _tileSheetBrowser { get; set; }
 
         //TODO : No really I desperately need an input class!
-        private bool mousePreviouslyPressed = true;
+        public bool mousePreviouslyPressed = true;
 
         public MapEditor() { }
         public void Initialize( GraphicsDevice graphicsDevice, SpriteBatch spriteBatch )
@@ -102,7 +102,7 @@ namespace IterationEngine.MonoProject
 
             _camera.Update( gameTime );
 
-            if( Mouse.GetState().LeftButton == ButtonState.Pressed )
+            if( Mouse.GetState().LeftButton == ButtonState.Pressed && !mousePreviouslyPressed )
             {
                 if( CheckIfSelectedTileClicked( Mouse.GetState().Position ) )
                 {
@@ -113,6 +113,12 @@ namespace IterationEngine.MonoProject
                 }
 
                 ChangeTileToTile( _camera.GetMousePosition(), CurrentlySelectedTile );
+            }
+
+            //TODO : Fix crap solution for handling mouse clicks.
+            if( Mouse.GetState().LeftButton == ButtonState.Released )
+            {
+                mousePreviouslyPressed = false;
             }
 
             if( Mouse.GetState().RightButton == ButtonState.Pressed )

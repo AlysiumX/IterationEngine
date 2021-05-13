@@ -66,16 +66,24 @@ namespace IterationEngine.MonoProject
 
         private void BuildTileSetTarget()
         {
-            TileSetTarget = new RenderTarget2D( _graphicDevice, CurrentlyLoadedTileSet.Width, CurrentlyLoadedTileSet.Height );
+            var spaceCounterOffsetX = 0;
+            var spaceCounterOffsetY = 0;
+            var spaceBetween = 1;
+
+            TileSetTarget = new RenderTarget2D( _graphicDevice, CurrentlyLoadedTileSet.Width + ( TotalTileX * spaceBetween ), CurrentlyLoadedTileSet.Height + ( TotalTileY * spaceBetween ) );
             _graphicDevice.SetRenderTarget( TileSetTarget );
             _spriteBatch.Begin( samplerState: SamplerState.PointClamp );
             for( var y = 0; y<TotalTileY; y++ )
             {
+                spaceCounterOffsetX = 0;
                 for( var x = 0; x<TotalTileX; x++ )
                 {
-                    _spriteBatch.Draw( CurrentlyLoadedTileSet, new Rectangle( x * TileSize, y * TileSize, TileSize, TileSize ), new Rectangle( x * TileSize, y * TileSize, TileSize, TileSize ), Color.White );
+                    _spriteBatch.Draw( CurrentlyLoadedTileSet, new Rectangle( x * TileSize + spaceCounterOffsetX, y * TileSize + spaceCounterOffsetY, TileSize, TileSize ), new Rectangle( x * TileSize, y * TileSize, TileSize, TileSize ), Color.White );
+                    spaceCounterOffsetX += spaceBetween;
                 }
+                spaceCounterOffsetY += spaceBetween;
             }
+
             _spriteBatch.End();
             _graphicDevice.SetRenderTarget( null );
         }
@@ -99,6 +107,7 @@ namespace IterationEngine.MonoProject
                 var mousePosition = Mouse.GetState().Position;
                 var tile = GetTileSelectionFromMouseLocation( mousePosition );
                 _parent.CurrentlySelectedTile = tile;
+                _parent.mousePreviouslyPressed = true;
                 Shown = false;
             }
 
