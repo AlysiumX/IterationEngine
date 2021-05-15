@@ -17,7 +17,6 @@ namespace IterationEngine.MonoProject
         public Game1()
         {
             Globals.Initialize();
-
             _graphics = new GraphicsDeviceManager( this );
 
             //TODO : Settings - Allow these to change during run time.
@@ -40,7 +39,8 @@ namespace IterationEngine.MonoProject
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch( GraphicsDevice );
-            _editor.Initialize( GraphicsDevice, _spriteBatch );
+            Globals.SetGraphicsDeviceAndSpriteBatch( _graphics.GraphicsDevice, _spriteBatch );
+            _editor.Initialize();
         }
 
         protected override void Update( GameTime gameTime )

@@ -11,14 +11,13 @@ namespace IterationEngine.MonoProject
     {
         public bool Shown { get; set; }
 
-        private GraphicsDevice _graphicDevice { get; set; }
-        private SpriteBatch _spriteBatch { get; set; }
+        private GraphicsDevice _graphicDevice { get { return Globals.GraphicsDevice; } }
+        private SpriteBatch _spriteBatch { get { return Globals.SpriteBatch; } }
+        private int TileSize { get { return Globals.GameSettings.TileSize; } }
 
         private Texture2D CurrentlyLoadedTileSet { get; set; }
         private int TotalTileX { get; set; }
         private int TotalTileY { get; set; }
-
-        private int TileSize { get; set; }
 
         private RenderTarget2D TileSetTarget { get; set; }
 
@@ -40,13 +39,7 @@ namespace IterationEngine.MonoProject
             _parent = parent;
         }
 
-        public void Initialize( GraphicsDevice graphicDevice, SpriteBatch spriteBatch )
-        {
-            _graphicDevice = graphicDevice;
-            _spriteBatch = spriteBatch;
-
-            TileSize = Globals.GameSettings.TileSize;
-        }
+        public void Initialize() { }
 
         public void Show( Texture2D texture )
         {

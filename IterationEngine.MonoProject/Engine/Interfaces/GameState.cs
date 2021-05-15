@@ -8,7 +8,7 @@ namespace IterationEngine.MonoProject
 {
     public interface GameState
     {
-        void Initialize( GraphicsDevice graphicsDevice, SpriteBatch spriteBatch );
+        void Initialize();
         void Update( GameTime gameTime );
         void Draw( GameTime gameTime );
     }

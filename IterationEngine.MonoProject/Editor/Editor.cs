@@ -10,6 +10,12 @@ namespace IterationEngine.MonoProject
 {
     public class MapEditor : GameState
     {
+        private GraphicsDevice _graphicDevice { get { return Globals.GraphicsDevice; } }
+        private SpriteBatch _spriteBatch { get { return Globals.SpriteBatch; } }
+        private TileSheetTile EditorTile { get { return EditorTiles.GridTile; } }
+        private TileSheetTile MenuBar { get { return EditorTiles.MenuBar; } }
+        public int TileSize = Globals.GameSettings.TileSize;
+
         private List<MapTile> ChangedTiles { get; set; }
         private int targetMapWidth = 10000;
         private int targetMapHeight = 10000;
@@ -21,38 +27,23 @@ namespace IterationEngine.MonoProject
 
         private RenderTarget2D _mapTexture;
 
-        //TODO : Load from Globals.TileSize
-        public int TileSize = TileSizes.Small;
-
-        public int TargetWidth { get; set; } = 640;
-        public int TargetHeight { get; set; } = 360;
-
-        private Texture2D EditorTileSheet { get; set; }
-        private TileSheetTile EditorTile { get; set; }
-
         private Texture2D ExampleTileSheet { get; set; }
         public TileSheetTile CurrentlySelectedTile { get; set; }
 
-        private GraphicsDevice _graphicDevice { get; set; }
-        private SpriteBatch _spriteBatch { get; set; }
-
         private TileSheetBrowser _tileSheetBrowser { get; set; }
+        private Rectangle TileSheetButton = new Rectangle( 8, Globals.GameSettings.GameHeight - 64 - 8, 64, 64 );
 
         //TODO : No really I desperately need an input class!
         public bool mousePreviouslyPressed = true;
 
         public MapEditor() { }
-        public void Initialize( GraphicsDevice graphicsDevice, SpriteBatch spriteBatch )
+        public void Initialize()
         {
-            _graphicDevice = graphicsDevice;
-            _spriteBatch = spriteBatch;
+            EditorTiles.Initialize();
 
             ChangedTiles = new List<MapTile>();
 
-            EditorTileSheet = Texture2D.FromFile( _graphicDevice, $"{AppDomain.CurrentDomain.BaseDirectory}/Content/EditorTiles.png" );
             ExampleTileSheet = Texture2D.FromFile( _graphicDevice, $"{AppDomain.CurrentDomain.BaseDirectory}/Content/ExampleTileSheet.png" );
-
-            EditorTile = new TileSheetTile( EditorTileSheet, 0, 0 );
             CurrentlySelectedTile = new TileSheetTile( ExampleTileSheet, 0, 0 );
 
             SetMapTileSize();
@@ -66,7 +57,7 @@ namespace IterationEngine.MonoProject
             RebuildMapToMapTexture();
 
             _tileSheetBrowser = new TileSheetBrowser();
-            _tileSheetBrowser.Initialize( graphicsDevice, spriteBatch );
+            _tileSheetBrowser.Initialize();
             _tileSheetBrowser.SetParent( this );
         }
 
@@ -112,6 +103,11 @@ namespace IterationEngine.MonoProject
                     return;
                 }
 
+                if( CheckIfMenuBarItemClicked( Mouse.GetState().Position ) )
+                {
+                    return;
+                }
+
                 ChangeTileToTile( _camera.GetMousePosition(), CurrentlySelectedTile );
             }
 
@@ -123,14 +119,21 @@ namespace IterationEngine.MonoProject
 
             if( Mouse.GetState().RightButton == ButtonState.Pressed )
             {
-                ChangeTileToTile( _camera.GetMousePosition(), EditorTile );
+                RemoveTile( _camera.GetMousePosition() );
             }
         }
 
         private bool CheckIfSelectedTileClicked( Point position )
         {
-            return position.X < 64 &&
-                   position.Y > Globals.GameSettings.GameHeight - 64;
+            return position.X > TileSheetButton.X &&
+                   position.X < TileSheetButton.X + TileSheetButton.Width &&
+                   position.Y > TileSheetButton.Y &&
+                   position.Y < TileSheetButton.Y + TileSheetButton.Height;
+        }
+
+        private bool CheckIfMenuBarItemClicked( Point position )
+        {
+            return position.Y < 32;
         }
 
         private void ChangeTileToTile( Vector2 mouseActualPosition, TileSheetTile tileSheetTile )
@@ -141,12 +144,28 @@ namespace IterationEngine.MonoProject
 
             if( mapTile != null )
             {
+                if( mapTile.TileSheetTile == EditorTile )
+                {
+                    ChangedTiles.Remove( mapTile );
+                }
+
                 mapTile.TileSheetTile = tileSheetTile;
             }
             else
             {
                 mapTile = new MapTile( tileX, tileY, tileSheetTile );
                 ChangedTiles.Add( mapTile );
+            }
+        }
+
+        private void RemoveTile( Vector2 mouseActualPosition )
+        {
+            var tileX = (int)Math.Floor( mouseActualPosition.X / TileSize );
+            var tileY = (int)Math.Floor( mouseActualPosition.Y / TileSize );
+            var mapTile = ChangedTiles.Where( tile => tile.X == tileX && tile.Y == tileY ).FirstOrDefault();
+            if( mapTile != null )
+            {
+                ChangedTiles.Remove( mapTile );
             }
         }
 
@@ -180,7 +199,8 @@ namespace IterationEngine.MonoProject
         private void RenderUIElements( GameTime gameTime )
         {
             _spriteBatch.Begin( samplerState: SamplerState.PointClamp );
-            _spriteBatch.Draw( CurrentlySelectedTile.Image, new Rectangle( 0, Globals.GameSettings.GameHeight - 64, 64, 64 ), new Rectangle( CurrentlySelectedTile.TileSheetX * TileSize, CurrentlySelectedTile.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
+            _spriteBatch.Draw( MenuBar.Image, new Rectangle( 0, 0, Globals.GameSettings.GameWidth, 32 ), new Rectangle( MenuBar.TileSheetX * TileSize, MenuBar.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
+            _spriteBatch.Draw( CurrentlySelectedTile.Image, TileSheetButton, new Rectangle( CurrentlySelectedTile.TileSheetX * TileSize, CurrentlySelectedTile.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
             _spriteBatch.End();
         }
     }

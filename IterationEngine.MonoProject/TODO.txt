@@ -1,0 +1,20 @@
+﻿Map Save
+	Only play area should be saved.
+Map Load
+Map Sequencer
+	When saving the user select what sequence they would like the level in. This is only used if the user provides and example that goes to the next level.
+Play Load Map.
+Add Player.
+Input System.
+Map Blockmap
+TileSheetBrowser - Image File Selection
+Multiple Tile Selection
+Add Entity System.
+Animation - Create
+Server
+
+-- Game Specific --
+Battle Plugin
+Farming Plugin
+Fishing Plugin
+RPG Plugin?
