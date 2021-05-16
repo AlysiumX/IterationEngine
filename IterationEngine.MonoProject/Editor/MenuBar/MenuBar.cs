@@ -12,23 +12,22 @@ namespace IterationEngine.MonoProject.Editor
     public class MenuBar
     {
         private SpriteBatch _spriteBatch { get { return Globals.SpriteBatch; } }
-        private int TileSize = 16; //Tile size of menu icons does not change from the tile size of the game.
+        private const int TileSize = 16; //Tile size of menu icons does not change from the tile size of the game.
+        private const int MenuBarHeight = 32;
 
         private List<MenuItem> _menuItems;
 
         private TileSheetTile MenuBackground { get { return EditorTiles.MenuBackground; } }
 
-        private int _spaceBetweenItems = 8;
-        private int _iconWidthAndHeight = 32;
 
         public MenuBar()
         {
             _menuItems = new List<MenuItem>
             {
-                new MenuItem(EditorTiles.New, EditorOperations.CreateNewMap ),
-                new MenuItem(EditorTiles.Open, EditorOperations.OpenMap ),
-                new MenuItem(EditorTiles.Save, EditorOperations.SaveMap ),
-                new MenuItem(EditorTiles.Play, EditorOperations.PlayMap )
+                new MenuItem(EditorTiles.New, 8, 0, 32, 32, EditorOperations.CreateNewMap ),
+                new MenuItem(EditorTiles.Open, 48, 0, 32, 32, EditorOperations.OpenMap ),
+                new MenuItem(EditorTiles.Save, 88, 0, 32, 32, EditorOperations.SaveMap ),
+                new MenuItem(EditorTiles.Play, 128, 0, 32, 32, EditorOperations.PlayMap )
             };
         }
 
@@ -46,17 +45,16 @@ namespace IterationEngine.MonoProject.Editor
 
         private MenuItem GetClickedMenuItemFromMenuBar( Point mousePosition )
         {
-            return _menuItems.Where( x => x.Tile.IsPointOnTile( mousePosition ) ).FirstOrDefault();
+            return _menuItems.Where( x => x.IsPointOnItem( mousePosition ) ).FirstOrDefault();
         }
 
         public void Draw( GameTime gameTime )
         {
             _spriteBatch.Begin( samplerState: SamplerState.PointClamp );
-            _spriteBatch.Draw( MenuBackground.Image, new Rectangle( 0, 0, Globals.GameSettings.GameWidth, 32 ), new Rectangle( MenuBackground.TileSheetX * TileSize, MenuBackground.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
-            for( var i = 0; i < _menuItems.Count; i++ )
+            _spriteBatch.Draw( MenuBackground.Image, new Rectangle( 0, 0, Globals.GameSettings.GameWidth, MenuBarHeight ), new Rectangle( MenuBackground.TileSheetX * TileSize, MenuBackground.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
+            foreach( var menuItem in _menuItems )
             {
-                var iconLocationX = ( ( _spaceBetweenItems * ( i + 1 ) ) + ( _iconWidthAndHeight * i ) );
-                _spriteBatch.Draw( _menuItems[i].Tile.Image, new Rectangle( iconLocationX, 0, 32, 32 ), new Rectangle( _menuItems[i].Tile.TileSheetX * TileSize, _menuItems[i].Tile.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
+                _spriteBatch.Draw( menuItem.Tile.Image, new Rectangle( menuItem.X, menuItem.Y, menuItem.Width, menuItem.Height ), new Rectangle( menuItem.Tile.TileSheetX * TileSize, menuItem.Tile.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
             }
 
             _spriteBatch.End();

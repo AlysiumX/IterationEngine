@@ -15,7 +15,6 @@ namespace IterationEngine.MonoProject.Editor
         public static TileSheetTile Play { get; private set; }
 
         private static GraphicsDevice _graphicsDevice { get { return Globals.GraphicsDevice; } }
-        private static SpriteBatch _spriteBatch { get { return Globals.SpriteBatch; } }
 
         private static Texture2D _editorTileSheet = Texture2D.FromFile( _graphicsDevice, $"{AppDomain.CurrentDomain.BaseDirectory}/Content/EditorTiles.png" );
 

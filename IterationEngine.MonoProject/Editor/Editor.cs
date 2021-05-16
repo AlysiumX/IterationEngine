@@ -38,6 +38,7 @@ namespace IterationEngine.MonoProject.Editor
         public bool mousePreviouslyPressed = true;
 
         public MapEditor() { }
+
         public void Initialize()
         {
             EditorTiles.Initialize();
@@ -53,11 +54,9 @@ namespace IterationEngine.MonoProject.Editor
             _camera = new Camera( _graphicDevice, _graphicDevice.Viewport, cameraStartingPosition, currentMapTileWidth * TileSize, currentMapTileHeight * TileSize, 1 );
             _camera.SetZoomLimitsBasedOnTileSize( TileSize );
 
-            _mapTexture = new RenderTarget2D( _graphicDevice, currentMapTileWidth * TileSize, currentMapTileHeight * TileSize );
+            RebuildMapToMapTexture();
 
             _menuBar = new MenuBar();
-
-            RebuildMapToMapTexture();
 
             _tileSheetBrowser = new TileSheetBrowser();
             _tileSheetBrowser.Initialize();
@@ -72,6 +71,7 @@ namespace IterationEngine.MonoProject.Editor
 
         private void RebuildMapToMapTexture()
         {
+            _mapTexture = new RenderTarget2D( _graphicDevice, currentMapTileWidth * TileSize, currentMapTileHeight * TileSize );
             _graphicDevice.SetRenderTarget( _mapTexture );
             _spriteBatch.Begin( samplerState: SamplerState.PointClamp );
             for( var y = 0; y < currentMapTileHeight; y++ )
