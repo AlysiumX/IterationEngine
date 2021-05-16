@@ -34,9 +34,6 @@ namespace IterationEngine.MonoProject.Editor
         private TileSheetBrowser _tileSheetBrowser { get; set; }
         private Rectangle TileSheetButton = new Rectangle( 8, Globals.GameSettings.GameHeight - 64 - 8, 64, 64 );
 
-        //TODO : No really I desperately need an input class!
-        public bool mousePreviouslyPressed = true;
-
         public MapEditor() { }
 
         public void Initialize()
@@ -96,8 +93,9 @@ namespace IterationEngine.MonoProject.Editor
 
             _camera.Update( gameTime );
 
-            if( Mouse.GetState().LeftButton == ButtonState.Pressed && !mousePreviouslyPressed )
+            if( Mouse.GetState().LeftButton == ButtonState.Pressed && !Input.MousePreviouslyPress )
             {
+                Input.MousePreviouslyPress = true;
                 if( CheckIfSelectedTileClicked( Mouse.GetState().Position ) )
                 {
                     if( !_tileSheetBrowser.Shown )
@@ -111,10 +109,9 @@ namespace IterationEngine.MonoProject.Editor
 
             _menuBar.Update( gameTime );
 
-            //TODO : Fix crap solution for handling mouse clicks.
             if( Mouse.GetState().LeftButton == ButtonState.Released )
             {
-                mousePreviouslyPressed = false;
+                Input.MousePreviouslyPress = false;
             }
 
             if( Mouse.GetState().RightButton == ButtonState.Pressed )

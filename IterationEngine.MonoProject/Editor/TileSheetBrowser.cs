@@ -30,9 +30,6 @@ namespace IterationEngine.MonoProject.Editor
         private int imageScrollValue = 0;
         private int scrollIncrement = 35;
 
-        //TODO : Desperately need an input class!
-        private bool mousePreviouslyPressed = true;
-
         private MapEditor _parent { get; set; }
 
         public void SetParent( MapEditor parent )
@@ -44,7 +41,6 @@ namespace IterationEngine.MonoProject.Editor
 
         public void Show( Texture2D texture )
         {
-            mousePreviouslyPressed = true;
             Shown = true;
             CurrentlyLoadedTileSet = texture;
             TotalTileX = texture.Width / TileSize;
@@ -96,18 +92,19 @@ namespace IterationEngine.MonoProject.Editor
 
             previousScroll = Mouse.GetState().ScrollWheelValue;
 
-            if( Mouse.GetState().LeftButton == ButtonState.Pressed && !mousePreviouslyPressed )
+            if( Mouse.GetState().LeftButton == ButtonState.Pressed && !Input.MousePreviouslyPress )
             {
+                Input.MousePreviouslyPress = true;
                 var mousePosition = Mouse.GetState().Position;
                 var tile = GetTileSelectionFromMouseLocation( mousePosition );
                 _parent.CurrentlySelectedTile = tile;
-                _parent.mousePreviouslyPressed = true;
+                Input.MousePreviouslyPress = true;
                 Shown = false;
             }
 
             if( Mouse.GetState().LeftButton == ButtonState.Released )
             {
-                mousePreviouslyPressed = false;
+                Input.MousePreviouslyPress = false;
             }
         }
 

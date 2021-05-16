@@ -1,4 +1,5 @@
 ﻿using IterationEngine.MonoProject.Editor;
+using IterationEngine.MonoProject.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,7 +20,6 @@ namespace IterationEngine.MonoProject.Editor
 
         private TileSheetTile MenuBackground { get { return EditorTiles.MenuBackground; } }
 
-
         public MenuBar()
         {
             _menuItems = new List<MenuItem>
@@ -33,13 +33,19 @@ namespace IterationEngine.MonoProject.Editor
 
         public void Update( GameTime gameTime )
         {
-            if( Mouse.GetState().LeftButton == ButtonState.Pressed )
+            if( Mouse.GetState().LeftButton == ButtonState.Pressed && !Input.MousePreviouslyPress )
             {
+                Input.MousePreviouslyPress = true;
                 var clickedMenuItem = GetClickedMenuItemFromMenuBar( Mouse.GetState().Position );
                 if( clickedMenuItem != null )
                 {
                     clickedMenuItem.Process();
                 }
+            }
+
+            if( Mouse.GetState().LeftButton == ButtonState.Released )
+            {
+                Input.MousePreviouslyPress = false;
             }
         }
 
