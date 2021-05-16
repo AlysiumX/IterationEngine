@@ -13,7 +13,7 @@ namespace IterationEngine.MonoProject
         private GraphicsDevice _graphicDevice { get { return Globals.GraphicsDevice; } }
         private SpriteBatch _spriteBatch { get { return Globals.SpriteBatch; } }
         private TileSheetTile EditorTile { get { return EditorTiles.GridTile; } }
-        private TileSheetTile MenuBar { get { return EditorTiles.MenuBar; } }
+
         public int TileSize = Globals.GameSettings.TileSize;
 
         private List<MapTile> ChangedTiles { get; set; }
@@ -24,8 +24,8 @@ namespace IterationEngine.MonoProject
         private int currentMapTileHeight = 0;
 
         private Camera _camera;
-
         private RenderTarget2D _mapTexture;
+        private MenuBar _menuBar;
 
         private Texture2D ExampleTileSheet { get; set; }
         public TileSheetTile CurrentlySelectedTile { get; set; }
@@ -53,6 +53,8 @@ namespace IterationEngine.MonoProject
             _camera.SetZoomLimitsBasedOnTileSize( TileSize );
 
             _mapTexture = new RenderTarget2D( _graphicDevice, currentMapTileWidth * TileSize, currentMapTileHeight * TileSize );
+
+            _menuBar = new MenuBar();
 
             RebuildMapToMapTexture();
 
@@ -103,13 +105,10 @@ namespace IterationEngine.MonoProject
                     return;
                 }
 
-                if( CheckIfMenuBarItemClicked( Mouse.GetState().Position ) )
-                {
-                    return;
-                }
-
                 ChangeTileToTile( _camera.GetMousePosition(), CurrentlySelectedTile );
             }
+
+            _menuBar.Update( gameTime );
 
             //TODO : Fix crap solution for handling mouse clicks.
             if( Mouse.GetState().LeftButton == ButtonState.Released )
@@ -129,11 +128,6 @@ namespace IterationEngine.MonoProject
                    position.X < TileSheetButton.X + TileSheetButton.Width &&
                    position.Y > TileSheetButton.Y &&
                    position.Y < TileSheetButton.Y + TileSheetButton.Height;
-        }
-
-        private bool CheckIfMenuBarItemClicked( Point position )
-        {
-            return position.Y < 32;
         }
 
         private void ChangeTileToTile( Vector2 mouseActualPosition, TileSheetTile tileSheetTile )
@@ -199,9 +193,10 @@ namespace IterationEngine.MonoProject
         private void RenderUIElements( GameTime gameTime )
         {
             _spriteBatch.Begin( samplerState: SamplerState.PointClamp );
-            _spriteBatch.Draw( MenuBar.Image, new Rectangle( 0, 0, Globals.GameSettings.GameWidth, 32 ), new Rectangle( MenuBar.TileSheetX * TileSize, MenuBar.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
             _spriteBatch.Draw( CurrentlySelectedTile.Image, TileSheetButton, new Rectangle( CurrentlySelectedTile.TileSheetX * TileSize, CurrentlySelectedTile.TileSheetY * TileSize, TileSize, TileSize ), Color.White );
             _spriteBatch.End();
+
+            _menuBar.Draw( gameTime );
         }
     }
 }
