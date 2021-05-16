@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IterationEngine.MonoProject
+namespace IterationEngine.MonoProject.Engine
 {
     public class TileSizes
     {

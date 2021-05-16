@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Text;
 
-namespace IterationEngine.MonoProject
+namespace IterationEngine.MonoProject.Engine
 {
     public class Camera
     {

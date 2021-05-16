@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IterationEngine.MonoProject
+namespace IterationEngine.MonoProject.Editor
 {
     public static class EditorTiles
     {
@@ -12,6 +12,7 @@ namespace IterationEngine.MonoProject
         public static TileSheetTile New { get; private set; }
         public static TileSheetTile Open { get; private set; }
         public static TileSheetTile Save { get; private set; }
+        public static TileSheetTile Play { get; private set; }
 
         private static GraphicsDevice _graphicsDevice { get { return Globals.GraphicsDevice; } }
         private static SpriteBatch _spriteBatch { get { return Globals.SpriteBatch; } }
@@ -25,6 +26,7 @@ namespace IterationEngine.MonoProject
             New = new TileSheetTile( _editorTileSheet, 2, 0 );
             Open = new TileSheetTile( _editorTileSheet, 3, 0 );
             Save = new TileSheetTile( _editorTileSheet, 4, 0 );
+            Play = new TileSheetTile( _editorTileSheet, 5, 0 );
         }
     }
 }

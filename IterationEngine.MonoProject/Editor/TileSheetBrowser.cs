@@ -1,13 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using IterationEngine.MonoProject.Engine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IterationEngine.MonoProject
+namespace IterationEngine.MonoProject.Editor
 {
-    public class TileSheetBrowser : GameState
+    public class TileSheetBrowser : GameState //TODO : Not really a game state.
     {
         public bool Shown { get; set; }
 

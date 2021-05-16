@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IterationEngine.MonoProject
+namespace IterationEngine.MonoProject.Editor
 {
     public class MapTile
     {

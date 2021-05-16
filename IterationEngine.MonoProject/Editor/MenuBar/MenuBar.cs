@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using IterationEngine.MonoProject.Editor;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -6,12 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IterationEngine.MonoProject
+namespace IterationEngine.MonoProject.Editor
 {
     public class MenuBar
     {
         private SpriteBatch _spriteBatch { get { return Globals.SpriteBatch; } }
-        private int TileSize = Globals.GameSettings.TileSize;
+        private int TileSize = 16; //Tile size of menu icons does not change from the tile size of the game.
 
         private List<MenuItem> _menuItems;
 
@@ -26,7 +27,8 @@ namespace IterationEngine.MonoProject
             {
                 new MenuItem(EditorTiles.New, EditorOperations.CreateNewMap ),
                 new MenuItem(EditorTiles.Open, EditorOperations.OpenMap ),
-                new MenuItem(EditorTiles.Save, EditorOperations.SaveMap )
+                new MenuItem(EditorTiles.Save, EditorOperations.SaveMap ),
+                new MenuItem(EditorTiles.Play, EditorOperations.PlayMap )
             };
         }
 
