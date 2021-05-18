@@ -98,7 +98,6 @@ namespace IterationEngine.MonoProject.Editor
                 var mousePosition = Mouse.GetState().Position;
                 var tile = GetTileSelectionFromMouseLocation( mousePosition );
                 _parent.CurrentlySelectedTile = tile;
-                Input.MousePreviouslyPress = true;
                 Shown = false;
             }
 

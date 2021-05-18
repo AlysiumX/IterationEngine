@@ -95,11 +95,12 @@ namespace IterationEngine.MonoProject.Editor
 
             if( Mouse.GetState().LeftButton == ButtonState.Pressed && !Input.MousePreviouslyPress )
             {
-                Input.MousePreviouslyPress = true;
                 if( CheckIfSelectedTileClicked( Mouse.GetState().Position ) )
                 {
+                    Input.MousePreviouslyPress = true;
                     if( !_tileSheetBrowser.Shown )
                         _tileSheetBrowser.Show( ExampleTileSheet );
+
 
                     return;
                 }

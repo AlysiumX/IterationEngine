@@ -35,10 +35,10 @@ namespace IterationEngine.MonoProject.Editor
         {
             if( Mouse.GetState().LeftButton == ButtonState.Pressed && !Input.MousePreviouslyPress )
             {
-                Input.MousePreviouslyPress = true;
                 var clickedMenuItem = GetClickedMenuItemFromMenuBar( Mouse.GetState().Position );
                 if( clickedMenuItem != null )
                 {
+                    Input.MousePreviouslyPress = true;
                     clickedMenuItem.Process();
                 }
             }
